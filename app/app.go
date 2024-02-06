@@ -5,12 +5,14 @@ import (
 	"fmt"
 )
 
+var filepath string = "sqlite.db"
+
 func main() {
 	setup()
 	printAll()
 
 	fmt.Println("")
-	db.Insert("test")
+	db.Insert(filepath, "test")
 	fmt.Println("Inserted test")
 	fmt.Println("")
 
@@ -19,14 +21,13 @@ func main() {
 
 func printAll() {
 	fmt.Println("Printing all:")
-	for _, v := range db.SelectAll() {
+	for _, v := range db.SelectAll(filepath) {
 		fmt.Println(v.ToString())
 	}
 	fmt.Println("Printing all: finish.")
 }
 
 func setup() {
-	db.Filepath = "sqlite.db"
-	db.DeleteAll()
-	db.Insert("init data")
+	db.DeleteAll(filepath)
+	db.Insert(filepath, "init data")
 }

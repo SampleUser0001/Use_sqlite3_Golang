@@ -16,24 +16,22 @@ func (u Username) ToString() string {
 	return fmt.Sprintf("Id: %d, Name: %s", u.Id, u.Name)
 }
 
-var Filepath string
-
 var tablename string = "username"
 
 /**
  * コネクションを開く。これだけは共通なので、関数にしておく。
  * closeはしていないので、呼び出し元でdefer closeすること。
  */
-func open() *sql.DB {
-	db, err := sql.Open("sqlite3", Filepath)
+func open(filepath string) *sql.DB {
+	db, err := sql.Open("sqlite3", filepath)
 	if err != nil {
 		panic(err)
 	}
 	return db
 }
 
-func SelectAll() []Username {
-	db := open()
+func SelectAll(filepath string) []Username {
+	db := open(filepath)
 	defer db.Close()
 
 	sqlStmt := "SELECT id, name FROM " + tablename
@@ -57,8 +55,8 @@ func SelectAll() []Username {
 	return usernameList
 }
 
-func Insert(name string) {
-	db := open()
+func Insert(filepath string, name string) {
+	db := open(filepath)
 	defer db.Close()
 
 	tx, err := db.Begin()
@@ -78,8 +76,8 @@ func Insert(name string) {
 	}
 }
 
-func DeleteAll() {
-	db := open()
+func DeleteAll(filepath string) {
+	db := open(filepath)
 	defer db.Close()
 
 	tx, err := db.Begin()
